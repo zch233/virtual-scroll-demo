@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .box {
+      border: 1px solid #ddd;margin: 10px;
+      height: 500px;
+      text-align: center;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+  <script>
+    const $el = document.querySelector('.box')
+    $el.innerHTML = [...Array(2000)].map(v => '<p>1</p>').join('');
+    let y = 0
+    const updateOffset = (e) => {
+      console.log(e);
+      e.preventDefault()
+      y += e.deltaY
+    }
+    $el.addEventListener("wheel", updateOffset)
+  </script>
+</body>
+</html>
