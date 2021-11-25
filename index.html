@@ -11,21 +11,58 @@
       border: 1px solid #ddd;margin: 10px;
       height: 500px;
       text-align: center;
-      overflow-y: auto;
+      overflow: hidden;
     }
+    p {height: 30px; display: flex;align-items: center;justify-content: center;margin: 0;}
   </style>
 </head>
 <body>
   <div class="box"></div>
   <script>
     const $el = document.querySelector('.box')
-    $el.innerHTML = [...Array(2000)].map(v => '<p>1</p>').join('');
-    let y = 0
-    const updateOffset = (e) => {
-      console.log(e);
-      e.preventDefault()
-      y += e.deltaY
+    const list = [...Array(2000)].map((item, i) => ({
+        height: 30,
+        index: i,
+        item: i,
+      }))
+    const containerHeight = $el.clientHeight
+    const sumHeight = (list, start = 0, end = list.length) => list.slice(start, end).reduce((a, b) => a + b.height, 0)
+    const contentHeight = sumHeight(list)
+    // 找到第一个累加高度大于指定高度的项目
+    const findIndexOverHeightItem = (list, offset) => {
+      let item = {}
+      let totalHeight = 0
+      for(let i=0;i<list.length;i++) {
+        const { height } = list[i]
+        totalHeight += height
+
+        if (totalHeight > offset) {
+          item = list[i]
+          break
+        }
+      }
+      return item
     }
+    let scrollY = 0
+    const render = (list, scrollY) => {
+      const headItem = findIndexOverHeightItem(list, scrollY)
+      console.log(headItem)
+      const tailItem = findIndexOverHeightItem(list, scrollY + containerHeight)
+      console.log(tailItem)
+      const renderList = list.slice(headItem.index, tailItem.index + 1)
+      const translateY = sumHeight(list, 0, headItem.index)
+      const $listWp = document.createElement("div")
+      $listWp.innerHTML = renderList.map(v => `<p>${v.item}</p>`).join('')
+      $listWp.style.transform = `translateY(-${translateY}px)`
+      $el.innerHTML = ''
+      $el.appendChild($listWp)
+    }
+    const updateOffset = (e) => {
+      e.preventDefault()
+      scrollY += e.deltaY
+      render(list, scrollY)
+    }
+    render(list, scrollY)
     $el.addEventListener("wheel", updateOffset)
   </script>
 </body>
