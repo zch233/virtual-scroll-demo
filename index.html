@@ -50,7 +50,7 @@
       const tailItem = findIndexOverHeightItem(list, scrollY + containerHeight)
       console.log(tailItem)
       const renderList = list.slice(headItem.index, tailItem.index + 1)
-      const translateY = sumHeight(list, 0, headItem.index)
+      const translateY = sumHeight(list, tailItem.index, headItem.index)
       const $listWp = document.createElement("div")
       $listWp.innerHTML = renderList.map(v => `<p>${v.item}</p>`).join('')
       $listWp.style.transform = `translateY(-${translateY}px)`
