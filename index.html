@@ -20,7 +20,7 @@
   <div class="box"></div>
   <script>
     const $el = document.querySelector('.box')
-    const list = [...Array(2000)].map((item, i) => ({
+    const list = [...Array(200000)].map((item, i) => ({
         height: 30,
         index: i,
         item: i,
@@ -46,9 +46,7 @@
     let scrollY = 0
     const render = (list, scrollY) => {
       const headItem = findIndexOverHeightItem(list, scrollY)
-      console.log(headItem)
       const tailItem = findIndexOverHeightItem(list, scrollY + containerHeight)
-      console.log(tailItem)
       const renderList = list.slice(headItem.index, tailItem.index + 1)
       const translateY = sumHeight(list, tailItem.index, headItem.index)
       const $listWp = document.createElement("div")
